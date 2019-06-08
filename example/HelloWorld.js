@@ -1,14 +1,10 @@
-<template>
-	<div>
-
-		Hello World!
-
-	</div>
-</template>
-
-<script>
-
 export default {
+	name: 'HelloWorld',
+	template: `
+		<div>
+			Hello World!
+		</div>
+	`,
 	props: {
 		sampleProperty: {
 			type: String,
@@ -20,8 +16,3 @@ export default {
 		},
 	},
 };
-</script>
-
-<style lang="scss" scoped>
-
-</style>

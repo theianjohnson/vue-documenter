@@ -16,15 +16,11 @@
 	</div>
 
 	<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
-	<script src="../dist/vue-documenter.umd.min.js"></script>
 	<script>
+		import App from './App.js';
+
 		new Vue({
-			el: '#app',
-			data () {
-				return {
-					
-				};
-			}
-		})
+		  render: h => h(App),
+		}).$mount(`#app`);
 	</script>
 </html>
