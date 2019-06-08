@@ -1,0 +1,24 @@
+{
+  "name": "vue-documenter",
+  "version": "0.0.1",
+  "description": "An automatic Vue component documenter - yes - a component that documents components",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "vuejs",
+    "vue",
+    "documenation",
+    "dynamic analysis"
+  ],
+  "author": "Ian Johnson",
+  "license": "ISC",
+  "devDependencies": {
+    "node-sass": "^4.12.0",
+    "sass-loader": "^7.1.0"
+  },
+  "dependencies": {
+    "bootstrap": "^4.3.1"
+  }
+}
