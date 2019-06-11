@@ -1,10 +1,17 @@
 <meta charset="utf-8">
 <title>vue-documenter demo</title>
+<script src="https://unpkg.com/vue"></script>
 <script src="./vue-documenter.umd.js"></script>
 
-<link rel="stylesheet" href="./vue-documenter.css">
 
+<div id="app">
+  <demo></demo>
+</div>
 
 <script>
-console.log(vue-documenter)
+new Vue({
+  components: {
+    demo: vue-documenter
+  }
+}).$mount('#app')
 </script>

@@ -153,11 +153,7 @@ export default {
     },
     methods: {
         loadComponents() {
-            this.log('loadComponents()');
-
             const components = this.$slots.default.filter(vnode => vnode.tag !== undefined);
-
-            this.log('Components found', components);
 
             if (!components) {
                 return [];
@@ -251,8 +247,6 @@ export default {
             return html;
         },
         loadProperties(vnode) {
-            this.log('loadProperties()', vnode);
-
             if (!vnode) {
                 return false;
             }
@@ -261,8 +255,6 @@ export default {
             const propertyKeys = Object.keys(vnode.componentInstance.$options.props);
 
             propertyKeys.sort();
-
-            this.log('Properties found', propertyKeys);
 
             for (let i = 0; i < propertyKeys.length; i += 1) {
                 const item = propertyKeys[i];
@@ -357,8 +349,6 @@ export default {
                     return 1;
                 });
             }
-
-            this.log(properties);
 
             return properties;
         },

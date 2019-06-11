@@ -3,6 +3,8 @@
   "version": "0.0.4",
   "description": "An automatic Vue component documenter - yes - a component that documents components",
   "main": "dist/vue-documenter.common.js",
+  "module": "dist/vue-documenter.umd.js",
+  "unpkg": "dist/vue-documenter.common.js",
   "scripts": {
     "build": "vue-cli-service build --target lib --name vue-documenter ./src/index.js",
     "serve": "vue-cli-service serve src/index.js"
