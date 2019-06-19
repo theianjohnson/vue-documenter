@@ -1,6 +1,6 @@
 {
   "name": "vue-documenter",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "An automatic Vue component documenter - yes - a component that documents components",
   "main": "dist/vue-documenter.common.js",
   "module": "dist/vue-documenter.umd.js",
