@@ -11,7 +11,7 @@
                 <h2 class="mt-0">Components</h2>
                 <ul>
                    <li v-for="component in loadedComponents" :key="`table-of-contents-${component.name}`">
-                       <a :href="`#{component.name}`">{{ component.name }}</a>
+                       <a :href="`#${component.name}`">{{ component.name }}</a>
                    </li>
                 </ul>
             </div>
