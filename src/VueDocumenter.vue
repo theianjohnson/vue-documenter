@@ -1,87 +1,80 @@
 <template>
-<div>
+<div :class="cssClasses.container">
 
     <div style="display: none;">
         <slot></slot>
     </div>
 
-    <div class="row">
-        <div class="col-sm-3">
-            <div class="card card-body">
-                <h2 class="mt-0">Components</h2>
-                <ul>
+    <div :class="cssClasses.row">
+        <div :class="cssClasses.tableOfContentsColumn">
+            <div :class="cssClasses.card">
+                <h2>Components</h2>
+                <ul :class="cssClasses.tableOfContentsColumnList">
                    <li v-for="component in loadedComponents" :key="`table-of-contents-${component.name}`">
                        <a :href="`#${getKebabCaseFromCamelCase(component.name)}`">{{ getKebabCaseFromCamelCase(component.name) }}</a>
                    </li>
                 </ul>
             </div>
         </div>
-        <div class="col-sm-9">
-            <div v-for="component in loadedComponents" class="card card-body mb-5" :key="`component-${component.name}`">
+        <div :class="cssClasses.componentsColumn">
+            <div v-for="component in loadedComponents" :class="cssClasses.componentsColumnComponent" style="margin-bottom: 3rem;" :key="`component-${component.name}`">
 
                 <h1 :id="getKebabCaseFromCamelCase(component.name)">&lt;{{ getKebabCaseFromCamelCase(component.name) }}&gt;</h1>
 
                 <h2>Properties</h2>
 
-                <div class="table-responsive mb-3">
-                    <table class="table table-striped">
+                <div :class="cssClasses.componentsColumnComponentTableWrapper" style="margin-bottom: 1rem;">
+                    <table :class="cssClasses.componentsColumnComponentTable">
                         <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Type</th>
-                            <th>Default Value</th>
-                            <th>Example</th>
-                        </tr>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Default Value</th>
+                                <th>Example</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        <tr v-for="property in component.properties" :key="`property-${property.name}`" :class="{ 'deprecated': property.deprecated }">
-                            <td style="white-space: nowrap;">
-                                {{ property.type !== 'string' ? ':' : '' }}{{ property.name }}
-                                <span v-if="property.required" class="badge badge-danger" :title="property.required">Required</span>
-                                <span v-if="property.deprecated" class="badge badge-warning" :title="property.deprecated" data-tippy>Deprecated <i class="fas fa-question-circle"></i></span>
-                            </td>
-                            <td style="white-space: nowrap;">{{ property.type }}</td>
-                            <td style="white-space: nowrap;">{{ property.defaultValue }}</td>
-                            <td><code>{{ property.example }}</code></td>
-                        </tr>
+                            <tr v-for="property in component.properties" :key="`property-${property.name}`" :class="{ 'deprecated': property.deprecated }">
+                                <td style="white-space: nowrap;">
+                                    {{ property.type !== 'string' ? ':' : '' }}{{ property.name }}
+                                    <span v-if="property.required" :class="cssClasses.badgeDanger" :title="property.required">Required</span>
+                                    <span v-if="property.deprecated" :class="cssClasses.badgeDeprecated" :title="property.deprecated" data-tippy>Deprecated <i class="fas fa-question-circle"></i></span>
+                                </td>
+                                <td style="white-space: nowrap;">{{ property.type }}</td>
+                                <td class="code-highlight" v-html="getCodeHighlightedStringFromObject(property.defaultValue)"></td>
+                                <td class="code-highlight" v-html="getCodeHighlightedStringFromObject(property.example)"></td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
 
                 <h2>Events (<a href="https://vuejs.org/v2/api/#vm-emit" target="_blank">Vue Docs</a>)</h2>
 
-                <div class="row mb-3">
-                    <div class="col">
-                        <div v-if="component.events" class="table-responsive">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Selector</th>
-                                        <th>On</th>
-                                        <th>Example Value</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="event in component.events" :key="`event-${event.name}`">
-                                        <td style="white-space: nowrap;">{{ event.name }}</td>
-                                        <td style="white-space: nowrap;">{{ event.selector }}</td>
-                                        <td style="white-space: nowrap;">{{ event.on }}</td>
-                                        <td style="white-space: nowrap;">{{ event.example }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <h3 v-else>None</h3>
-                    </div>
+                <div :class="cssClasses.componentsColumnComponentTableWrapper" style="margin-bottom: 1rem;">
+                    <table :class="cssClasses.componentsColumnComponentTable">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>On</th>
+                                <th>Example Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="event in component.events" :key="`event-${event.name}`">
+                                <td style="white-space: nowrap;">{{ event.name }}</td>
+                                <td style="white-space: nowrap;">{{ event.on }}</td>
+                                <td style="white-space: nowrap;">{{ event.example }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
 
-                <div class="row">
-                    <div class="col-sm-6">
+                <div :class="cssClasses.row">
+                    <div :class="cssClasses.exampleMinimal">
                         <h2>Minimal Example</h2>
                         <div class="code-highlight" v-html="getComponentExampleHtml(component, { onlyRequired: true })"></div>
                     </div>
-                    <div class="col-sm-6">
+                    <div :class="cssClasses.exampleFull">
                         <h2>Full Example</h2>
                         <div class="code-highlight" v-html="getComponentExampleHtml(component)"></div>
                     </div>
@@ -91,45 +84,43 @@
         </div>
     </div>
 
-    <div class="alert alert-info d-flex">
-        <i class="fas fa-exclamation-triangle fa-2x mr-4"></i>
+    <div :class="cssClasses.instructions">
         <div>
             <h2>If you're building a new Vue component and you want it to be auto-documented here</h2>
             <div>
                 <p>
-                    <span class="badge badge-danger">Required</span> The component must have it's properties defined with <code>type</code> and <code>default</code> properties, see <a href="https://vuejs.org/v2/guide/components-props.html#Prop-Validation" target="_blank">Prop Validation</a>
+                    <span :class="cssClasses.badgeRequired">Required</span> The component must have it's properties defined with <code>type</code> and <code>default</code> properties, see <a href="https://vuejs.org/v2/guide/components-props.html#Prop-Validation" target="_blank">Prop Validation</a>
                 </p>
                 <p>
-                    <span class="badge badge-secondary">Optional</span>  The component maybe also include a top level <code>meta</code> property with slot and event availability, ex.
+                    <span :class="cssClasses.badgeOptional">Optional</span>  The component maybe also include a top level <code>meta</code> property with slot and event availability, ex.
 <code style="white-space: pre;">
 meta: {
-slots: {
-    default: {
-        type: 'component',
-        valid: ['ComponentNameOne', 'ComponentNameTwo'],
-    ],
-    named: [{
-        name: 'filters',
-        type: 'component',
-        valid: ['OtherComponentName'],
+    slots: {
+        default: {
+            type: 'component',
+            valid: ['ComponentNameOne', 'ComponentNameTwo'],
+        },
+        named: [{
+            name: 'filters',
+            type: 'component',
+            valid: ['OtherComponentName'],
+        }],
+    },
+    events: [{
+        name: 'date-selected',
+        on: 'click',
+        example: '2019-02-11',
     }],
-},
-events: [{
-    name: 'date-selected',
-    selector: '.dates li',
-    on: 'click',
-    example: '2019-02-11',
-}],
 },
 </code>
                 </p>
                 <p>
-                    <span class="badge badge-secondary">Optional</span>  The component's properties may also include an additional <code>meta</code> property in the property definition, ex.
+                    <span :class="cssClasses.badgeOptional">Optional</span>  The component's properties may also include an additional <code>meta</code> property in the property definition, ex.
 <code style="white-space: pre;">
 meta: {
-required: [true|false],
-example: 'Example implementation code',
-deprecated: 'Deprecation note that will appear on hover',
+    required: [true|false],
+    example: 'Example implementation code',
+    deprecated: 'Deprecation note that will appear on hover',
 },
 </code>
                 </p>
@@ -143,17 +134,55 @@ deprecated: 'Deprecation note that will appear on hover',
 <script>
 
 export default {
+    name: 'vue-datatable',
+    meta: {
+        slots: {
+            default: {
+                type: 'component',
+                valid: ['Any'],
+            },
+        },
+    },
+    props: {
+        cssOverrideClasses: {
+            type: Object,
+            default: () => ({
+                badgeDeprecated: 'badge badge-warning',
+                badgeOptional: 'badge badge-secondary',
+                badgeRequired: 'badge badge-danger',
+                card: 'card card-body',
+                componentsColumn: 'col-sm-9',
+                componentsColumnComponent: 'card card-body',
+                componentsColumnComponentTableWrapper: 'table-responsive',
+                componentsColumnComponentTable: 'table table-striped',
+                container: 'container-fluid',
+                exampleMinimal: 'col-sm-6',
+                exampleFull: 'col-sm-6',
+                instructions: 'alert alert-info',
+                tableOfContentsColumn: 'col-sm-3',
+                tableOfContentsColumnList: '',
+                row: 'row',
+            }),
+            meta: {
+                example: '{ card: \'your-custom-card-class\' }',
+            }
+        },
+    },
     data() {
         return {
             loadedComponents: [],
+            cssClasses: {},
         };
+    },
+    created() {
+        this.cssClasses = { ...this.cssClasses, ...this.cssOverrideClasses };
     },
     mounted() {
         this.loadComponents();
     },
     methods: {
         loadComponents() {
-            const components = this.$slots.default.filter(vnode => vnode.tag !== undefined);
+            const components = this.$slots.default && this.$slots.default.filter(vnode => vnode.tag !== undefined);
 
             if (!components) {
                 return [];
@@ -163,8 +192,8 @@ export default {
                 const component = {
                     name: components[i].componentOptions.tag,
                     properties: [...properties],
-                    events: (components[i].componentInstance.$options.meta && components[i].componentInstance.$options.meta.events) ? components[i].componentInstance.$options.meta.events : null,
-                    slots: (components[i].componentInstance.$options.meta && components[i].componentInstance.$options.meta.slots) ? components[i].componentInstance.$options.meta.slots : null,
+                    events: (components[i].componentInstance.$options.meta && components[i].componentInstance.$options.meta.events) ? components[i].componentInstance.$options.meta.events : [],
+                    slots: (components[i].componentInstance.$options.meta && components[i].componentInstance.$options.meta.slots) ? components[i].componentInstance.$options.meta.slots : [],
                 };
                 this.loadedComponents.push(component);
             }
@@ -189,7 +218,7 @@ export default {
             let slots = '';
             if(!minimal) {
                 if (component.slots) {
-                    if (component.slots.named.length > 0) {
+                    if (component.slots.named && component.slots.named.length > 0) {
                         component.slots.named.forEach((componentSlot) => {
                             if (componentSlot.type === 'component') {
                                 componentSlot.valid.forEach((validComponent) => {
@@ -246,108 +275,127 @@ export default {
 
             return html;
         },
+        getCodeHighlightedStringFromObject(objectString) {
+
+            if(!objectString) { return ''; }
+
+            let html = objectString;
+
+            // Replace quoted values
+            // eslint-disable-next-line no-useless-escape
+            html = html.replace(/["']?(\w+)["']?\:\s*["']?([\w\s-]*)["']?,?/g, `<div><span class="property">$1</span>: '<span class="value">$2</span>',</div>`);
+
+            // Replace unquoted values
+            // eslint-disable-next-line no-useless-escape
+            html = html.replace(/["']?(\w+)["']?\:\s*([\w\s-]*),?/g, `<div><span class="property">$1</span>: <span class="value">$2</span></div>`);
+
+            return html;
+        },
         loadProperties(vnode) {
             if (!vnode) {
                 return false;
             }
 
             const properties = [];
-            const propertyKeys = Object.keys(vnode.componentInstance.$options.props);
+            const propertyKeys = vnode.componentInstance.$options.props && Object.keys(vnode.componentInstance.$options.props);
 
-            propertyKeys.sort();
+            if(propertyKeys) {
+                propertyKeys.sort();
 
-            for (let i = 0; i < propertyKeys.length; i += 1) {
-                const item = propertyKeys[i];
-                const name = this.getKebabCaseFromCamelCase(item);
-                const type = this.getPropertyType(vnode.componentInstance.$options.props[item].type);
-                let defaultValue = vnode.componentInstance.$options.props[item].default && vnode.componentInstance.$options.props[item].default.toString();
-                const required = vnode.componentInstance.$options.props[item].meta && vnode.componentInstance.$options.props[item].meta.required;
-                const deprecated = vnode.componentInstance.$options.props[item].meta && vnode.componentInstance.$options.props[item].meta.deprecated;
-                let example = vnode.componentInstance.$options.props[item].meta && vnode.componentInstance.$options.props[item].meta.example;
+                for (let i = 0; i < propertyKeys.length; i += 1) {
+                    const item = propertyKeys[i];
+                    const name = this.getKebabCaseFromCamelCase(item);
+                    const type = this.getPropertyType(vnode.componentInstance.$options.props[item].type);
+                    let defaultValue = vnode.componentInstance.$options.props[item].default && vnode.componentInstance.$options.props[item].default.toString();
+                    const required = vnode.componentInstance.$options.props[item].meta && vnode.componentInstance.$options.props[item].meta.required;
+                    const deprecated = vnode.componentInstance.$options.props[item].meta && vnode.componentInstance.$options.props[item].meta.deprecated;
+                    let example = vnode.componentInstance.$options.props[item].meta && vnode.componentInstance.$options.props[item].meta.example;
 
-                switch (type) {
-                case 'array':
-                    example = example || '[4, 8, 15, 16, 23, 42]';
+                    switch (type) {
+                    case 'array':
+                        example = example || '[4, 8, 15, 16, 23, 42]';
 
-                    if (defaultValue) {
-                        const cleanedDefaultValue = defaultValue.match(/{\s*return\s*(.*);?\s*}/);
+                        if (defaultValue) {
+                            const cleanedDefaultValue = defaultValue.match(/{\s*return\s*(.*);?\s*}/);
 
-                        if (cleanedDefaultValue && cleanedDefaultValue[1] !== undefined) {
-                            [, defaultValue] = cleanedDefaultValue;
+                            if (cleanedDefaultValue && cleanedDefaultValue[1] !== undefined) {
+                                defaultValue = cleanedDefaultValue[1];
+                            }
                         }
-                    }
-                    break;
+                        break;
 
-                case 'object':
-                    example = example || '{ key1: value1, key2: value2 }';
+                    case 'object':
+                        example = example || '{ key1: value1, key2: value2 }';
 
-                    if (defaultValue) {
-                        const cleanedDefaultValue = defaultValue.match(/(?:_default|function)\(\)\s*(.*)/);
+                        if (defaultValue) {
+                            // const cleanedDefaultValue = defaultValue.match(/(?:_default|function)\(\) (return \{)?(.*)(; \})?/);
+                            const cleanedDefaultValue = defaultValue.match(/(?:_default|function)\(\) (?:{\s*return )?([\s\S]*)/);
 
-                        if (cleanedDefaultValue && cleanedDefaultValue[1] !== undefined) {
-                            [, defaultValue] = cleanedDefaultValue;
+                            if (cleanedDefaultValue && cleanedDefaultValue[1] !== undefined) {
+                                defaultValue = cleanedDefaultValue[1].replace(/;\s*}$/, '');
+                            }
                         }
-                    }
-                    break;
+                        break;
 
-                case 'string':
-                    example = example || 'Some text';
-                    break;
+                    case 'string':
+                        example = example || 'Some text';
+                        break;
 
-                case 'function':
-                    example = example || '(value) => { return value.toUpperCase() }';
+                    case 'function':
+                        example = example || '(value) => { return value.toUpperCase() }';
 
-                    if (defaultValue) {
-                        const cleanedDefaultValue = defaultValue.match(/{(.*)}/);
+                        if (defaultValue) {
+                            const cleanedDefaultValue = defaultValue.match(/{(.*)}/);
 
-                        if (cleanedDefaultValue && cleanedDefaultValue[1] !== undefined) {
-                            [, defaultValue] = cleanedDefaultValue;
+                            if (cleanedDefaultValue && cleanedDefaultValue[1] !== undefined) {
+                                defaultValue = cleanedDefaultValue[1];
 
+                            }
                         }
+                        break;
+
+                    case 'number':
+                        example = example || '14';
+                        break;
+
+                    case 'boolean':
+                        example = example || 'true';
+                        break;
+
+                    default:
+                        example = example || '';
                     }
-                    break;
 
-                case 'number':
-                    example = example || '14';
-                    break;
+                    example = example.replace(/"/g, "'");
 
-                case 'boolean':
-                    example = example || 'true';
-                    break;
-
-                default:
-                    example = example || '';
+                    properties.push({
+                        name,
+                        type,
+                        defaultValue,
+                        example,
+                        required,
+                        deprecated,
+                    });
                 }
 
-                example = example.replace(/"/g, "'");
+                if (properties.length > 0) {
+                    properties.sort((a, b) => {
+                        const aIsRequired = !!a.required;
+                        const bIsRequired = !!b.required;
 
-                properties.push({
-                    name,
-                    type,
-                    defaultValue,
-                    example,
-                    required,
-                    deprecated,
-                });
-            }
+                        if (aIsRequired === bIsRequired) {
+                            return a.name > b.name;
+                        }
 
-            if (properties.length > 0) {
-                properties.sort((a, b) => {
-                    const aIsRequired = !!a.required;
-                    const bIsRequired = !!b.required;
-
-                    if (aIsRequired === bIsRequired) {
-                        return a.name > b.name;
-                    }
-
-                    if (aIsRequired !== bIsRequired) {
-                        if (aIsRequired && !bIsRequired) {
-                            return -1;
+                        if (aIsRequired !== bIsRequired) {
+                            if (aIsRequired && !bIsRequired) {
+                                return -1;
+                            }
+                            return 1;
                         }
                         return 1;
-                    }
-                    return 1;
-                });
+                    });
+                }
             }
 
             return properties;
