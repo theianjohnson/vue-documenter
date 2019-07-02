@@ -41,8 +41,8 @@
                                     <span v-if="property.deprecated" :class="cssClasses.badgeDeprecated" :title="property.deprecated" data-tippy>Deprecated <i class="fas fa-question-circle"></i></span>
                                 </td>
                                 <td style="white-space: nowrap;">{{ property.type }}</td>
-                                <td class="code-highlight" v-html="getCodeHighlightedStringFromObject(property.defaultValue)"></td>
-                                <td class="code-highlight" v-html="getCodeHighlightedStringFromObject(property.example)"></td>
+                                <td><div class="code-highlight" v-html="getCodeHighlightedStringFromObject(property.defaultValue)"></div></td>
+                                <td><div class="code-highlight" v-html="getCodeHighlightedStringFromObject(property.example)"></div></td>
                             </tr>
                         </tbody>
                     </table>
@@ -57,6 +57,7 @@
                                 <th>Name</th>
                                 <th>On</th>
                                 <th>Example Value</th>
+                                <th>Usage</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -64,6 +65,11 @@
                                 <td style="white-space: nowrap;">{{ event.name }}</td>
                                 <td style="white-space: nowrap;">{{ event.on }}</td>
                                 <td style="white-space: nowrap;">{{ event.example }}</td>
+                                <td style="white-space: nowrap;">
+                                    <div class="code-highlight">
+                                        <span class="property" style="margin: 0;">@{{ event.name }}</span>="<span class="value">someFunction</span>"
+                                    </div>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -72,11 +78,11 @@
                 <div :class="cssClasses.row">
                     <div :class="cssClasses.exampleMinimal">
                         <h2>Minimal Example</h2>
-                        <div class="code-highlight" v-html="getComponentExampleHtml(component, { onlyRequired: true })"></div>
+                        <div class="code-block code-highlight" v-html="getComponentExampleHtml(component, { onlyRequired: true })"></div>
                     </div>
                     <div :class="cssClasses.exampleFull">
                         <h2>Full Example</h2>
-                        <div class="code-highlight" v-html="getComponentExampleHtml(component)"></div>
+                        <div class="code-block code-highlight" v-html="getComponentExampleHtml(component)"></div>
                     </div>
                 </div>
 
@@ -430,13 +436,17 @@ export default {
     }
 
     /* Code highlighting */
+    .code-block {
+        background: #f5f2f0;
+        display: block;
+        padding: 1em;
+    }
+
     .code-highlight {
 
-        background: #f5f2f0;
         color: #999999;
         font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
         overflow-x: scroll;
-        padding: 1em;
         text-shadow: 0 1px #ffffff;
         white-space: nowrap;
 
