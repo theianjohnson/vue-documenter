@@ -41,8 +41,8 @@
                                     <span v-if="property.deprecated" :class="cssClasses.badgeDeprecated" :title="property.deprecated" data-tippy>Deprecated <i class="fas fa-question-circle"></i></span>
                                 </td>
                                 <td style="white-space: nowrap;">{{ property.type }}</td>
-                                <td><div class="code-highlight" v-html="getCodeHighlightedStringFromObject(property.defaultValue)"></div></td>
-                                <td><div class="code-highlight" v-html="getCodeHighlightedStringFromObject(property.example)"></div></td>
+                                <td v-html="getHighlightedCodeString(property.defaultValue, 'javascript')"></td>
+                                <td v-html="getHighlightedCodeString(property.example, 'javascript')"></td>
                             </tr>
                         </tbody>
                     </table>
@@ -78,11 +78,11 @@
                 <div :class="cssClasses.row">
                     <div :class="cssClasses.exampleMinimal">
                         <h2>Minimal Example</h2>
-                        <div class="code-block code-highlight" v-html="getComponentExampleHtml(component, { onlyRequired: true })"></div>
+                        <div v-html="getHighlightedCodeString(getComponentExampleHtml(component, true), 'html')"></div>
                     </div>
                     <div :class="cssClasses.exampleFull">
                         <h2>Full Example</h2>
-                        <div class="code-block code-highlight" v-html="getComponentExampleHtml(component)"></div>
+                        <div v-html="getHighlightedCodeString(getComponentExampleHtml(component), 'html')"></div>
                     </div>
                 </div>
 
@@ -139,6 +139,16 @@ meta: {
 
 <script>
 
+import Prism from 'prismjs';
+import NormalizeWhitespace from 'prismjs/plugins/normalize-whitespace/prism-normalize-whitespace';
+
+Prism.plugins.NormalizeWhitespace.setDefaults({
+    'remove-trailing': true,
+    'remove-indent': true,
+    'left-trim': true,
+    'right-trim': true,
+});
+
 export default {
     name: 'vue-datatable',
     meta: {
@@ -149,26 +159,31 @@ export default {
             },
         },
     },
+    components: {
+
+    },
     props: {
         cssOverrideClasses: {
             type: Object,
-            default: () => ({
-                badgeDeprecated: 'badge badge-warning',
-                badgeOptional: 'badge badge-secondary',
-                badgeRequired: 'badge badge-danger',
-                card: 'card card-body',
-                componentsColumn: 'col-sm-9',
-                componentsColumnComponent: 'card card-body',
-                componentsColumnComponentTableWrapper: 'table-responsive',
-                componentsColumnComponentTable: 'table table-striped',
-                container: 'container-fluid',
-                exampleMinimal: 'col-sm-6',
-                exampleFull: 'col-sm-6',
-                instructions: 'alert alert-info',
-                tableOfContentsColumn: 'col-sm-3',
-                tableOfContentsColumnList: '',
-                row: 'row',
-            }),
+            default: () => {
+                return {
+                    badgeDeprecated: 'badge badge-warning',
+                    badgeOptional: 'badge badge-secondary',
+                    badgeRequired: 'badge badge-danger',
+                    card: 'card card-body',
+                    componentsColumn: 'col-sm-9',
+                    componentsColumnComponent: 'card card-body',
+                    componentsColumnComponentTableWrapper: 'table-responsive',
+                    componentsColumnComponentTable: 'table table-striped',
+                    container: 'container-fluid',
+                    exampleMinimal: 'col-sm-6',
+                    exampleFull: 'col-sm-6',
+                    instructions: 'alert alert-info',
+                    tableOfContentsColumn: 'col-sm-3',
+                    tableOfContentsColumnList: '',
+                    row: 'row',
+                }
+            },
             meta: {
                 example: '{ card: \'your-custom-card-class\' }',
             }
@@ -207,6 +222,72 @@ export default {
             return true;
         },
         getComponentExampleHtml(component, minimal = false) {
+
+            const componentTag = this.getKebabCaseFromCamelCase(component.name);
+
+
+            // Build the properties HTML
+            const componentProperties = minimal ? component.properties && component.properties.filter(property => property.required && !property.deprecated) : component.properties && component.properties.filter(property => !property.deprecated);
+
+            let properties = componentProperties.map(property => `\t${property.type === 'string' ? '' : ':'}${property.name}="${property.example}"`).join("\n");
+
+            if (properties) {
+                properties = `\n${properties}\n`;
+            }
+
+            // Build the slots HTML
+            let slots = '';
+            if(!minimal) {
+                if (component.slots) {
+                    if (component.slots.named && component.slots.named.length > 0) {
+                        component.slots.named.forEach((componentSlot) => {
+                            if (componentSlot.type === 'component') {
+                                componentSlot.valid.forEach((validComponent) => {
+
+                                    const validComponentTagName = this.getKebabCaseFromCamelCase(validComponent);
+
+                                    slots = `
+                                        ${slots}
+                                        &lt;template v-slot:${componentSlot.name}>
+                                            &lt;${validComponentTagName}>&lt;/${validComponentTagName}>
+                                        &lt;/template>
+                                    `;
+                                });
+                            }
+                        });
+                    }
+
+                    if (component.slots.default) {
+
+                        slots = `${slots}
+                            &lt;template v-slot:default>
+                        `;
+
+                        if (component.slots.default.type === 'component') {
+                            component.slots.default.valid.forEach((validComponent) => {
+
+                                const validComponentTagName = this.getKebabCaseFromCamelCase(validComponent);
+
+                                slots = `${slots}<br><span class="slot-contents"><a href="#${validComponentTagName}">&lt;<span class="tag">${validComponentTagName}</span>&gt;&lt;/<span class="tag">${validComponentTagName}</span>&gt;</a></span>`;
+                            });
+                        }
+
+                        slots = `${slots}
+                            &lt;/template>
+                        `;
+                    }
+                }
+
+                if (slots) {
+                    slots = `${slots}`;
+                }
+            }
+
+            const html = `&lt;${componentTag}${properties}>${slots}&lt;/${componentTag}>`;
+
+            return html;
+        },
+        getComponentExampleHtmlWithMarkup(component, minimal = false) {
 
             const componentTag = this.getKebabCaseFromCamelCase(component.name);
 
@@ -281,21 +362,8 @@ export default {
 
             return html;
         },
-        getCodeHighlightedStringFromObject(objectString) {
-
-            if(!objectString) { return ''; }
-
-            let html = objectString;
-
-            // Replace quoted values
-            // eslint-disable-next-line no-useless-escape
-            html = html.replace(/["']?(\w+)["']?\:\s*["']?([\w\s-]*)["']?,?/g, `<div><span class="property">$1</span>: '<span class="value">$2</span>',</div>`);
-
-            // Replace unquoted values
-            // eslint-disable-next-line no-useless-escape
-            html = html.replace(/["']?(\w+)["']?\:\s*([\w\s-]*),?/g, `<div><span class="property">$1</span>: <span class="value">$2</span></div>`);
-
-            return html;
+        getHighlightedCodeString(html, language) {
+            return `<pre style="background: none; margin: 0; padding: 0;"><code class="language-${language}">${html}</code></pre>`;
         },
         loadProperties(vnode) {
             if (!vnode) {
@@ -334,8 +402,16 @@ export default {
                         example = example || '{ key1: value1, key2: value2 }';
 
                         if (defaultValue) {
-                            // const cleanedDefaultValue = defaultValue.match(/(?:_default|function)\(\) (return \{)?(.*)(; \})?/);
-                            const cleanedDefaultValue = defaultValue.match(/(?:_default|function)\(\) (?:{\s*return )?([\s\S]*)/);
+
+                            let cleanedDefaultValue;
+
+                            const containsFunction = defaultValue.match(/(?:_default|function)\(\)/);
+
+                            if(containsFunction) {
+                                cleanedDefaultValue = defaultValue.match(/(?:_default|function)\(\) (?:{\s*return )?([\s\S]*)/);
+                            } else {
+                                cleanedDefaultValue = defaultValue.match(/{\s*return\s*([\s\S]*});?\s*}$/);
+                            }
 
                             if (cleanedDefaultValue && cleanedDefaultValue[1] !== undefined) {
                                 defaultValue = cleanedDefaultValue[1].replace(/;\s*}$/, '');
@@ -372,7 +448,9 @@ export default {
                         example = example || '';
                     }
 
-                    example = example.replace(/"/g, "'");
+                    if(example) {
+                        example = example.replace(/"/g, "'");
+                    }
 
                     properties.push({
                         name,
@@ -420,6 +498,8 @@ export default {
 
 <style lang="scss" scoped>
 
+    @import '../node_modules/prismjs/themes/prism.css';
+
     h2 {
         margin-top: 1rem;
     }
@@ -431,55 +511,10 @@ export default {
         }
     }
 
+    /*
     .indent {
         margin-left: 2rem;
     }
-
-    /* Code highlighting */
-    .code-block {
-        background: #f5f2f0;
-        display: block;
-        padding: 1em;
-    }
-
-    .code-highlight {
-
-        color: #999999;
-        font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
-        overflow-x: scroll;
-        text-shadow: 0 1px #ffffff;
-        white-space: nowrap;
-
-        /deep/ .tag,
-        /deep/ .property,
-        /deep/ .value {
-            display: inline-block;
-        }
-
-        /deep/ .tag {
-            color: #990055;
-        }
-
-        /deep/ .property {
-            color: #669900;
-            margin-left: 2em;
-        }
-
-        /deep/ .value {
-            color: #0077aa;
-        }
-
-        /deep/ .slot {
-            margin-left: 2em;
-
-            .property {
-                margin-left: 0;
-            }
-
-            .slot-contents {
-                margin-left: 4em;
-            }
-        }
-    }
+    */
 
 </style>
