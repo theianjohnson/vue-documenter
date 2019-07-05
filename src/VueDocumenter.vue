@@ -34,15 +34,22 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="property in component.properties" :key="`property-${property.name}`" :class="{ 'deprecated': property.deprecated }">
-                                <td style="white-space: nowrap;">
-                                    {{ property.type !== 'string' ? ':' : '' }}{{ property.name }}
-                                    <span v-if="property.required" :class="cssClasses.badgeDanger" :title="property.required">Required</span>
-                                    <span v-if="property.deprecated" :class="cssClasses.badgeDeprecated" :title="property.deprecated" data-tippy>Deprecated <i class="fas fa-question-circle"></i></span>
+                            <template v-if="component.properties.length > 0">
+                                <tr v-for="property in component.properties" :key="`property-${property.name}`" :class="{ 'deprecated': property.deprecated }">
+                                    <td style="white-space: nowrap;">
+                                        {{ property.type !== 'string' ? ':' : '' }}{{ property.name }}
+                                        <span v-if="property.required" :class="cssClasses.badgeDanger" :title="property.required">Required</span>
+                                        <span v-if="property.deprecated" :class="cssClasses.badgeDeprecated" :title="property.deprecated" data-tippy>Deprecated <i class="fas fa-question-circle"></i></span>
+                                    </td>
+                                    <td style="white-space: nowrap;">{{ property.type }}</td>
+                                    <td v-html="getHighlightedCodeString(property.defaultValue, 'javascript')"></td>
+                                    <td v-html="getHighlightedCodeString(property.example, 'javascript')"></td>
+                                </tr>
+                            </template>
+                            <tr v-else>
+                                <td colspan="999">
+                                    No properties
                                 </td>
-                                <td style="white-space: nowrap;">{{ property.type }}</td>
-                                <td v-html="getHighlightedCodeString(property.defaultValue, 'javascript')"></td>
-                                <td v-html="getHighlightedCodeString(property.example, 'javascript')"></td>
                             </tr>
                         </tbody>
                     </table>
@@ -61,15 +68,20 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="event in component.events" :key="`event-${event.name}`">
-                                <td style="white-space: nowrap;">{{ event.name }}</td>
-                                <td style="white-space: nowrap;">{{ event.on }}</td>
-                                <td style="white-space: nowrap;">{{ event.example }}</td>
-                                <td style="white-space: nowrap;">
-                                    <div class="code-highlight">
-                                        <span class="property" style="margin: 0;">@{{ event.name }}</span>="<span class="value">someFunction</span>"
-                                    </div>
-                                </td>
+                            <template v-if="component.events.length > 0">
+                                <tr v-for="event in component.events" :key="`event-${event.name}`">
+                                    <td style="white-space: nowrap;">{{ event.name }}</td>
+                                    <td style="white-space: nowrap;">{{ event.on }}</td>
+                                    <td style="white-space: nowrap;">{{ event.example }}</td>
+                                    <td style="white-space: nowrap;">
+                                        <div class="code-highlight">
+                                            <span class="property" style="margin: 0;">@{{ event.name }}</span>="<span class="value">someFunction</span>"
+                                        </div>
+                                    </td>
+                                </tr>
+                            </template>
+                            <tr v-else>
+                                <td colspan="999">No events</td>
                             </tr>
                         </tbody>
                     </table>
