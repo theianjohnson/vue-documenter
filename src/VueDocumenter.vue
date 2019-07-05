@@ -7,7 +7,7 @@
 
     <div :class="cssClasses.row">
         <div :class="cssClasses.tableOfContentsColumn">
-            <div :class="cssClasses.card">
+            <div :class="cssClasses.card" style="position: sticky; top: 0;">
                 <h2>Components</h2>
                 <ul :class="cssClasses.tableOfContentsColumnList">
                    <li v-for="component in loadedComponents" :key="`table-of-contents-${component.name}`">
