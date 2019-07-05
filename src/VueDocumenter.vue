@@ -229,7 +229,7 @@ export default {
             // Build the properties HTML
             const componentProperties = minimal ? component.properties && component.properties.filter(property => property.required && !property.deprecated) : component.properties && component.properties.filter(property => !property.deprecated);
 
-            let properties = componentProperties.map(property => `\t${property.type === 'string' ? '' : ':'}${property.name}="${property.example}"`).join("\n");
+            let properties = componentProperties.map(property => `\t${property.type === 'string' ? '' : ':'}${property.name}="${property.example.replace(/[\r\n\t]+/g, ' ')}"`).join("\n");
 
             if (properties) {
                 properties = `\n${properties}\n`;
@@ -246,12 +246,7 @@ export default {
 
                                     const validComponentTagName = this.getKebabCaseFromCamelCase(validComponent);
 
-                                    slots = `
-                                        ${slots}
-                                        &lt;template v-slot:${componentSlot.name}>
-                                            &lt;${validComponentTagName}>&lt;/${validComponentTagName}>
-                                        &lt;/template>
-                                    `;
+                                    slots = `${slots}\t&lt;template v-slot:${componentSlot.name}>\t\t&lt;${validComponentTagName}>&lt;/${validComponentTagName}>&lt;/template>`;
                                 });
                             }
                         });
@@ -259,27 +254,23 @@ export default {
 
                     if (component.slots.default) {
 
-                        slots = `${slots}
-                            &lt;template v-slot:default>
-                        `;
+                        slots = `${slots}\n\t&lt;template v-slot:default>`;
 
                         if (component.slots.default.type === 'component') {
                             component.slots.default.valid.forEach((validComponent) => {
 
                                 const validComponentTagName = this.getKebabCaseFromCamelCase(validComponent);
 
-                                slots = `${slots}<br><span class="slot-contents"><a href="#${validComponentTagName}">&lt;<span class="tag">${validComponentTagName}</span>&gt;&lt;/<span class="tag">${validComponentTagName}</span>&gt;</a></span>`;
+                                slots = `${slots}\n\t\t<a href="#${validComponentTagName}">&lt;${validComponentTagName}>&lt;/${validComponentTagName}></a>`;
                             });
                         }
 
-                        slots = `${slots}
-                            &lt;/template>
-                        `;
+                        slots = `${slots}\n\t&lt;/template>`;
                     }
                 }
 
                 if (slots) {
-                    slots = `${slots}`;
+                    slots = `${slots}\n`;
                 }
             }
 
@@ -287,6 +278,7 @@ export default {
 
             return html;
         },
+        /*
         getComponentExampleHtmlWithMarkup(component, minimal = false) {
 
             const componentTag = this.getKebabCaseFromCamelCase(component.name);
@@ -362,6 +354,7 @@ export default {
 
             return html;
         },
+        */
         getHighlightedCodeString(html, language) {
             return `<pre style="background: none; margin: 0; padding: 0;"><code class="language-${language}">${html}</code></pre>`;
         },
@@ -395,6 +388,9 @@ export default {
                             if (cleanedDefaultValue && cleanedDefaultValue[1] !== undefined) {
                                 defaultValue = cleanedDefaultValue[1];
                             }
+
+                            // Attempt to de-indent if necessary
+                            defaultValue = this.attemptCodeUnindent(defaultValue);
                         }
                         break;
 
@@ -416,6 +412,9 @@ export default {
                             if (cleanedDefaultValue && cleanedDefaultValue[1] !== undefined) {
                                 defaultValue = cleanedDefaultValue[1].replace(/;\s*}$/, '');
                             }
+
+                            // Attempt to de-indent if necessary
+                            defaultValue = this.attemptCodeUnindent(defaultValue);
                         }
                         break;
 
@@ -491,6 +490,22 @@ export default {
             const typeFunction = typeFunctionString.toString().split(' ')[1];
 
             return typeFunction.substr(0, typeFunction.length - 2).toLowerCase();
+        },
+        attemptCodeUnindent(string) {
+            const codeLines = string.split("\n");
+            const lastLine = codeLines.slice(-1)[0];
+            const leadSpacingToRemove = lastLine.match(/^\s*/)[0];
+            
+            if(leadSpacingToRemove) {
+                let adjustedCodeLines = [];
+                codeLines.forEach(line => {
+                    adjustedCodeLines.push(line.replace(new RegExp(`^${leadSpacingToRemove}`), ''));
+                });
+
+                string = adjustedCodeLines.join("\n");
+            }
+
+            return string;
         },
     },
 };
