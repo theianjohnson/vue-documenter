@@ -247,7 +247,7 @@ export default {
             // Build the properties HTML
             const componentProperties = minimal ? component.properties && component.properties.filter(property => property.required && !property.deprecated) : component.properties && component.properties.filter(property => !property.deprecated);
 
-            let properties = componentProperties.map(property => `\t${property.type === 'string' ? '' : ':'}${property.name}="${property.example.replace(/[\r\n\t]+/g, ' ')}"`).join("\n");
+            let properties = componentProperties.map(property => `\t${property.type === 'string' ? '' : ':'}${property.name}="${property.example.replace(/[\r\n\t]+/g, ' ').trim()}"`).join("\n");
 
             if (properties) {
                 properties = `\n${properties}\n`;
