@@ -34,7 +34,20 @@
 export default {
 	name: 'HelloWorld',
 	props: {
-		msg: String,
+		anEmptyString: {
+			type: String,
+			default: '',
+			meta: {
+				example: 'An example string',
+			}
+		},
+		someString: {
+			type: String,
+			default: 'A default value',
+			meta: {
+				example: 'An example string',
+			}
+		},
 		anEmptyArray: {
 			type: Array,
 			default: () => [],

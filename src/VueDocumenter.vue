@@ -42,8 +42,14 @@
                                         <span v-if="property.deprecated" :class="cssClasses.badgeDeprecated" :title="property.deprecated" data-tippy>Deprecated <i class="fas fa-question-circle"></i></span>
                                     </td>
                                     <td style="white-space: nowrap;">{{ property.type }}</td>
-                                    <td v-html="getHighlightedCodeString(property.defaultValue, 'javascript')"></td>
-                                    <td v-html="getHighlightedCodeString(property.example, 'javascript')"></td>
+                                    <td>
+                                        <div v-if="property.type !== 'string'" v-html="getHighlightedCodeString(property.defaultValue, 'javascript')"></div>
+                                        <div v-else><code class="language-none">{{ property.defaultValue }}</code></div>
+                                    </td>
+                                    <td>
+                                        <div v-if="property.type !== 'string'" v-html="getHighlightedCodeString(property.example, 'javascript')"></div>
+                                        <div v-else><code class="language-none">{{ property.example }}</code></div>
+                                    </td>
                                 </tr>
                             </template>
                             <tr v-else>
@@ -393,6 +399,7 @@ export default {
                     switch (type) {
                     case 'array':
                         example = example || '[4, 8, 15, 16, 23, 42]';
+                        example = this.attemptCodeUnindent(example);
 
                         if (defaultValue) {
                             const cleanedDefaultValue = defaultValue.match(/{\s*return\s*(.*);?\s*}/);
@@ -408,6 +415,7 @@ export default {
 
                     case 'object':
                         example = example || '{ key1: value1, key2: value2 }';
+                        example = this.attemptCodeUnindent(example);
 
                         if (defaultValue) {
 
@@ -436,14 +444,17 @@ export default {
 
                     case 'function':
                         example = example || '(value) => { return value.toUpperCase() }';
+                        example = this.attemptCodeUnindent(example);
 
                         if (defaultValue) {
                             const cleanedDefaultValue = defaultValue.match(/{(.*)}/);
 
                             if (cleanedDefaultValue && cleanedDefaultValue[1] !== undefined) {
                                 defaultValue = cleanedDefaultValue[1];
-
                             }
+
+                            // Attempt to de-indent if necessary
+                            defaultValue = this.attemptCodeUnindent(defaultValue);
                         }
                         break;
 
