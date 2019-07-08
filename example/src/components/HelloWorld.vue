@@ -1,6 +1,5 @@
 <template>
 	<div class="hello">
-		<h1>{{ msg }}</h1>
 		<p>
 			For a guide and recipes on how to configure / customize this project,<br>
 			check out the
@@ -33,6 +32,25 @@
 <script>
 export default {
 	name: 'HelloWorld',
+	meta: {
+		events: [{
+			name: 'component-clicked',
+			on: 'click',
+			example: '4',
+		}],
+		slots: {
+			default: {
+				type: 'component',
+				valid: ['ComponentOne', 'AnotherComponent'],
+			},
+			named: [
+				{
+					name: 'a-named-slot',
+					type: 'html',
+				},
+			],
+		},
+	},
 	props: {
 		anEmptyString: {
 			type: String,

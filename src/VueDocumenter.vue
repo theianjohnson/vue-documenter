@@ -80,9 +80,7 @@
                                     <td style="white-space: nowrap;">{{ event.on }}</td>
                                     <td style="white-space: nowrap;">{{ event.example }}</td>
                                     <td style="white-space: nowrap;">
-                                        <div class="code-highlight">
-                                            <span class="property" style="margin: 0;">@{{ event.name }}</span>="<span class="value">someFunction</span>"
-                                        </div>
+                                        <code class="language-html">&lt;{{ getKebabCaseFromCamelCase(component.name) }} @{{ event.name }}="someFunction" /></code>
                                     </td>
                                 </tr>
                             </template>
@@ -173,7 +171,7 @@ export default {
         slots: {
             default: {
                 type: 'component',
-                valid: ['Any'],
+                valid: ['AnyComponent'],
             },
         },
     },
@@ -244,29 +242,43 @@ export default {
             const componentTag = this.getKebabCaseFromCamelCase(component.name);
 
 
+            // Build the events HTML
+            let events = '';
+            if(!minimal) {
+                events = component.events.map(event => `\t@${event.name}="someFunction"`).join("\n");
+
+                if (events) {
+                    events = `\n${events}\n`;
+                }
+            }
+            
+
             // Build the properties HTML
             const componentProperties = minimal ? component.properties && component.properties.filter(property => property.required && !property.deprecated) : component.properties && component.properties.filter(property => !property.deprecated);
 
             let properties = componentProperties.map(property => `\t${property.type === 'string' ? '' : ':'}${property.name}="${property.example.replace(/[\r\n\t]+/g, ' ').trim()}"`).join("\n");
 
             if (properties) {
-                properties = `\n${properties}\n`;
+                properties = `${(events ? '' : "\n")}${properties}\n`;
             }
 
             // Build the slots HTML
             let slots = '';
             if(!minimal) {
                 if (component.slots) {
+
                     if (component.slots.named && component.slots.named.length > 0) {
                         component.slots.named.forEach((componentSlot) => {
+                            let validSlotContents = '';
+
                             if (componentSlot.type === 'component') {
                                 componentSlot.valid.forEach((validComponent) => {
-
                                     const validComponentTagName = this.getKebabCaseFromCamelCase(validComponent);
-
-                                    slots = `${slots}\t&lt;template v-slot:${componentSlot.name}>\t\t&lt;${validComponentTagName}>&lt;/${validComponentTagName}>&lt;/template>`;
+                                    validSlotContents = `&lt;${validComponentTagName}>&lt;/${validComponentTagName}>`;
                                 });
                             }
+
+                            slots = `\n${slots}\t&lt;template v-slot:${componentSlot.name}>${validSlotContents}&lt;/template>`;
                         });
                     }
 
@@ -274,12 +286,15 @@ export default {
 
                         slots = `${slots}\n\t&lt;template v-slot:default>`;
 
+                        let validSlotContents = '';
+
                         if (component.slots.default.type === 'component') {
                             component.slots.default.valid.forEach((validComponent) => {
 
                                 const validComponentTagName = this.getKebabCaseFromCamelCase(validComponent);
+                                validSlotContents = `&lt;${validComponentTagName}>&lt;/${validComponentTagName}>`;
 
-                                slots = `${slots}\n\t\t<a href="#${validComponentTagName}">&lt;${validComponentTagName}>&lt;/${validComponentTagName}></a>`;
+                                slots = `${slots}\n\t\t${validSlotContents}`;
                             });
                         }
 
@@ -292,7 +307,7 @@ export default {
                 }
             }
 
-            const html = `&lt;${componentTag}${properties}>${slots}&lt;/${componentTag}>`;
+            const html = `&lt;${componentTag}${events}${properties}>${slots}&lt;/${componentTag}>`;
 
             return html;
         },
