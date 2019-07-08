@@ -38,7 +38,7 @@
                                 <tr v-for="property in component.properties" :key="`property-${property.name}`" :class="{ 'deprecated': property.deprecated }">
                                     <td style="white-space: nowrap;">
                                         {{ property.type !== 'string' ? ':' : '' }}{{ property.name }}
-                                        <span v-if="property.required" :class="cssClasses.badgeDanger" :title="property.required">Required</span>
+                                        <span v-if="property.required" :class="cssClasses.badgeRequired" :title="property.required">Required</span>
                                         <span v-if="property.deprecated" :class="cssClasses.badgeDeprecated" :title="property.deprecated" data-tippy>Deprecated <i class="fas fa-question-circle"></i></span>
                                     </td>
                                     <td style="white-space: nowrap;">{{ property.type }}</td>
