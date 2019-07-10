@@ -525,9 +525,13 @@ export default {
             return internalName && internalName.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
         },
         getPropertyType(typeFunctionString) {
-            const typeFunction = typeFunctionString.toString().split(' ')[1];
+            if(typeFunctionString) {
+                const typeFunction = typeFunctionString.toString().split(' ')[1];
 
-            return typeFunction.substr(0, typeFunction.length - 2).toLowerCase();
+                return typeFunction.substr(0, typeFunction.length - 2).toLowerCase();
+            }
+
+            return 'unknown';
         },
         attemptCodeUnindent(string) {
             const codeLines = string.split("\n");
