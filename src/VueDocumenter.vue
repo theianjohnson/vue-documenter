@@ -43,12 +43,10 @@
                                     </td>
                                     <td style="white-space: nowrap;">{{ property.type }}</td>
                                     <td>
-                                        <div v-if="property.type !== 'string'" v-html="getHighlightedCodeString(property.defaultValue, 'javascript')"></div>
-                                        <div v-else><code class="language-none">{{ property.defaultValue }}</code></div>
+                                        <div v-html="getHighlightedCodeString(property.defaultValue, (property.type === 'string' ? 'none' : 'javascript'))"></div>
                                     </td>
                                     <td>
-                                        <div v-if="property.type !== 'string'" v-html="getHighlightedCodeString(property.example, 'javascript')"></div>
-                                        <div v-else><code class="language-none">{{ property.example }}</code></div>
+                                        <div v-html="getHighlightedCodeString(property.example, (property.type === 'string' ? 'none' : 'javascript'))"></div>
                                     </td>
                                 </tr>
                             </template>
@@ -79,9 +77,7 @@
                                     <td style="white-space: nowrap;">{{ event.name }}</td>
                                     <td style="white-space: nowrap;">{{ event.on }}</td>
                                     <td style="white-space: nowrap;">{{ event.example }}</td>
-                                    <td style="white-space: nowrap;">
-                                        <code class="language-html">&lt;{{ getKebabCaseFromCamelCase(component.name) }} @{{ event.name }}="someFunction" /></code>
-                                    </td>
+                                    <td style="white-space: nowrap;" v-html="getEventExampleString(component, event)"></td>
                                 </tr>
                             </template>
                             <tr v-else>
@@ -256,7 +252,7 @@ export default {
             // Build the properties HTML
             const componentProperties = minimal ? component.properties && component.properties.filter(property => property.required && !property.deprecated) : component.properties && component.properties.filter(property => !property.deprecated);
 
-            let properties = componentProperties.map(property => `\t${property.type === 'string' ? '' : ':'}${property.name}="${property.example.replace(/[\r\n\t]+/g, ' ').trim()}"`).join("\n");
+            let properties = componentProperties.map(property => `\t${property.type === 'string' ? '' : ':'}${property.name}="${property.example.replace(/[\r\n\t]+/g, ' ').replace(/\s+/g, ' ').trim()}"`).join("\n");
 
             if (properties) {
                 properties = `${(events ? '' : "\n")}${properties}\n`;
@@ -520,6 +516,10 @@ export default {
             }
 
             return properties;
+        },
+        getEventExampleString(component, event) {
+            const html = `&lt;${this.getKebabCaseFromCamelCase(component.name)} @${event.name}=&quot;someFunction&quot; />`;
+            return this.getHighlightedCodeString(html, 'html');
         },
         getKebabCaseFromCamelCase(internalName) {
             return internalName && internalName.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
