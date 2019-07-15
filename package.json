@@ -2,23 +2,15 @@
   "name": "vue-documenter",
   "version": "0.0.12",
   "description": "An automatic Vue component documenter - yes - a component that documents components",
+  "author": "Ian Johnson",
+  "scripts": {
+    "serve": "vue-cli-service serve src/index.js",
+    "build": "vue-cli-service build --mode development --target lib --name vue-documenter ./src/index.js",
+    "build-dev": "vue-cli-service build --target lib --name vue-documenter ./src/index.js"
+  },
   "main": "dist/vue-documenter.common.js",
   "module": "dist/vue-documenter.umd.js",
   "unpkg": "dist/vue-documenter.umd.js",
-  "scripts": {
-    "build": "vue-cli-service build --target lib --name vue-documenter ./src/index.js",
-    "serve": "vue-cli-service serve src/index.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/theianjohnson/vue-documenter"
-  },
-  "keywords": [
-    "vuejs",
-    "vue",
-    "documenation",
-    "dynamic analysis"
-  ],
   "files": [
     "dist/*",
     "src/*",
@@ -26,19 +18,30 @@
     "*.json",
     "*.js"
   ],
-  "author": "Ian Johnson",
-  "license": "ISC",
+  "dependencies": {
+    "core-js": "^2.6.5",
+    "prismjs": "^1.16.0"
+  },
   "devDependencies": {
-    "@vue/cli-service": "^3.9.0",
+    "@vue/cli-plugin-babel": "^3.9.2",
+    "@vue/cli-service": "^3.9.2",
     "css-loader": "^3.0.0",
     "node-sass": "^4.12.0",
     "postcss-loader": "^3.0.0",
     "sass-loader": "^7.1.0",
-    "vue-template-compiler": "^2.6.10",
     "vue-loader": "^15.7.0",
-    "webpack": "^4.35.2"
+    "vue-template-compiler": "^2.6.10",
+    "webpack": "^4.35.3"
   },
-  "dependencies": {
-    "prismjs": "^1.16.0"
+  "keywords": [
+    "vuejs",
+    "vue",
+    "documenation",
+    "dynamic analysis"
+  ],
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/theianjohnson/vue-documenter"
   }
 }
