@@ -1,6 +1,6 @@
 {
   "name": "vue-documenter",
-  "version": "0.0.13",
+  "version": "1.0.0",
   "description": "An automatic Vue component documenter - yes - a component that documents components",
   "author": "Ian Johnson",
   "scripts": {
