@@ -34,5 +34,11 @@ An automatic, living Vue component documenter - yes - a component that documents
 
 ```
 
+# Output
+![Example Vue Documenter output](example/vue-documenter-example.png)
+
 # Why?
 For when you don't always have time to keep secondary documentation updated, or aren't able to roll out something like Storybook for everybody on your team.
+
+# Read more
+https://medium.com/skilljar-engineering/the-quickest-dirtiest-automatic-est-vue-documenter-ever-cf55845b4df9
