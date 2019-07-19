@@ -7,10 +7,37 @@ An automatic, living Vue component documenter - yes - a component that documents
 
 <template>
 	<div>
+		// Initially works with Bootstrap 4 classes
 		<vue-documenter>
 			<some-component></some-component>
 			<another-component></another-component>
 		</vue-documenter>
+
+		// But you can also remap your own (these are defaults)
+		/*
+		<vue-documenter
+			:css-override-classes="{
+				badgeDeprecated: 'badge badge-warning',
+				badgeOptional: 'badge badge-secondary',
+				badgeRequired: 'badge badge-danger',
+				card: 'card card-body',
+				componentsColumn: 'col-sm-9',
+				componentsColumnComponent: 'card card-body',
+				componentsColumnComponentTableWrapper: 'table-responsive',
+				componentsColumnComponentTable: 'table table-striped',
+				container: 'container-fluid',
+				exampleMinimal: 'col-sm-6',
+				exampleFull: 'col-sm-6',
+				instructions: 'alert alert-info',
+				tableOfContentsColumn: 'col-sm-3',
+				tableOfContentsColumnList: '',
+				row: 'row'
+			}"
+		>
+			<some-component></some-component>
+			<another-component></another-component>
+		</vue-documenter>
+		*/
 	</div>
 </template>
 <script>
