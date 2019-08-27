@@ -69,3 +69,11 @@ For when you don't always have time to keep secondary documentation updated, or 
 
 # Read more
 https://medium.com/skilljar-engineering/the-quickest-dirtiest-automatic-est-vue-documenter-ever-cf55845b4df9
+
+# Roadmap
+* Add ability to group components in the documentation
+* Update events' example value to be code highlighted
+* Update documentation table of contents to be sticky
+* Update CSS override classes to be individual properties rather than one all-or-nothing overridable object
+* Add description field for prop meta
+* Better usage of slots

@@ -5,8 +5,8 @@
   "author": "Ian Johnson",
   "scripts": {
     "serve": "vue-cli-service serve src/index.js",
-    "build": "vue-cli-service build --mode development --target lib --name vue-documenter ./src/index.js",
-    "build-dev": "vue-cli-service build --target lib --name vue-documenter ./src/index.js"
+    "build": "vue-cli-service build --target lib --name vue-documenter ./src/index.js",
+    "build-dev": "vue-cli-service build --mode development --target lib --name vue-documenter ./src/index.js"
   },
   "main": "dist/vue-documenter.common.js",
   "module": "dist/vue-documenter.umd.js",
