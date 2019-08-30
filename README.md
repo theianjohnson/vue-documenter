@@ -2,7 +2,7 @@
 An automatic, living Vue component documenter - yes - a component that documents components, with no build step (ie Webpack or Rollup or extra commands to run, because it's just another component).
 
 # Usage
-```
+```vue
 // YourVueDocumentationPage.vue
 
 <template>
