@@ -81,3 +81,17 @@ https://medium.com/skilljar-engineering/the-quickest-dirtiest-automatic-est-vue-
 * [Done, not yet published] Update CSS override classes to be individual properties rather than one all-or-nothing overridable object
 * [Done, not yet published] Add documentation ~URL~ description field for component meta
 * [Done, not yet published] Add description field for prop meta
+
+# Contributing
+PRs totally accepted 👍
+
+To run this project locally you'll need a few global packages installed 
+* `npm install -g @vue/cli @vue/cli-global-service`
+
+Then get to the `example` directory
+* `cd /your-repo-location/vue-documenter/example`
+
+And run it!
+* `npm run serve`
+
+This will build the `/your-repo-location/vue-documenter/src/VueDocumenter.vue` and copy the compiled file to the `/your-repo-location/vue-documenter/example/dist/` directory where it'll be referenced correctly by the example `App.vue` entrypoint
