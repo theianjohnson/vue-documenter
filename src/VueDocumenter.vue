@@ -88,11 +88,11 @@
                 </div>
 
                 <div :class="cssClasses.row || cssClassRow">
-                    <div :class="cssClasses.exampleMinimal || cssClassExampleMinimal">
+                    <div :class="cssClasses.exampleMinimal || cssClassExampleMinimalColumn">
                         <h2>Minimal Example</h2>
                         <div v-html="getHighlightedCodeString(getComponentExampleHtml(component, true), 'html')"></div>
                     </div>
-                    <div :class="cssClasses.exampleFull || cssClassExampleFull">
+                    <div :class="cssClasses.exampleFull || cssClassExampleFullColumn">
                         <h2>Full Example</h2>
                         <div v-html="getHighlightedCodeString(getComponentExampleHtml(component), 'html')"></div>
                     </div>
@@ -264,14 +264,14 @@ export default {
                 example: 'your-custom-css-class-string',
             },
         },
-        cssClassExampleMinimal: {
+        cssClassExampleMinimalColumn: {
             type: String,
             default: 'col-sm-6',
             meta: {
                 example: 'your-custom-css-class-string',
             },
         },
-        cssClassExampleFull: {
+        cssClassExampleFullColumn: {
             type: String,
             default: 'col-sm-6',
             meta: {
