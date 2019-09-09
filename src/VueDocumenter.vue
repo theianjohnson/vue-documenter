@@ -75,8 +75,8 @@
                             <template v-if="component.events.length > 0">
                                 <tr v-for="event in component.events" :key="`event-${event.name}`">
                                     <td style="white-space: nowrap;">{{ event.name }}</td>
-                                    <td style="white-space: nowrap;">{{ event.on }}</td>
-                                    <td style="white-space: nowrap;">{{ event.example }}</td>
+                                    <td style="white-space: nowrap;">{{ event.description }}</td>
+                                    <td v-html="getHighlightedCodeString(event.example, 'javascript')"></td>
                                     <td style="white-space: nowrap;" v-html="getEventExampleString(component, event)"></td>
                                 </tr>
                             </template>
@@ -126,7 +126,7 @@ meta: {
     },
     events: [{
         name: 'date-selected',
-        on: 'click',
+        description: 'On date click',
         example: '2019-02-11',
     }],
 },

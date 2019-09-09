@@ -34,8 +34,12 @@ export default {
 	name: 'HelloWorld',
 	meta: {
 		events: [{
-			name: 'component-clicked',
-			on: 'click',
+			name: 'an-event-on-load',
+			description: 'On component load',
+			example: '{ someKey: \'someValue\' }',
+		}, {
+			name: 'another-click-event',
+			description: 'On sample element click',
 			example: '4',
 		}],
 		slots: {
