@@ -19,8 +19,7 @@ An automatic, living Vue component documenter - yes - a component that documents
 			<another-component></another-component>
 		</vue-documenter>
 
-		// But you can also remap your own (these are defaults)
-		/*
+		// You can also remap your own (these are defaults)
 		<vue-documenter
 			css-class-badge-deprecated="badge badge-warning"
 			css-class-badge-optional="badge badge-secondary"
@@ -41,7 +40,6 @@ An automatic, living Vue component documenter - yes - a component that documents
 			<some-component></some-component>
 			<another-component></another-component>
 		</vue-documenter>
-		*/
 	</div>
 </template>
 <script>
@@ -76,10 +74,10 @@ https://medium.com/skilljar-engineering/the-quickest-dirtiest-automatic-est-vue-
 
 # Roadmap
 * [Bug] Documentation example code spacing in named slots
-* [Done, not yet published] Update events' example value to be code highlighted
 * [Feature] Add ability to group components in the documentation
+* [Feature] Better usage of slots
+* [Done, not yet published] Update events' example value to be code highlighted
 * [Done, not yet published] Update documentation table of contents to be sticky
 * [Done, not yet published] Update CSS override classes to be individual properties rather than one all-or-nothing overridable object
 * [Done, not yet published] Add documentation ~URL~ description field for component meta
 * [Done, not yet published] Add description field for prop meta
-* [Feature] Better usage of slots

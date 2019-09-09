@@ -116,6 +116,7 @@
                     <span :class="cssClassBadgeOptional || cssOverrideClasses.badgeOptional">Optional</span>  The component maybe also include a top level <code>meta</code> property with slot and event availability, ex.
 <code style="white-space: pre;">
 meta: {
+    description: 'Optional component description that\'ll get piped into the documentation',
     slots: {
         default: {
             type: 'component',
@@ -141,6 +142,7 @@ meta: {
 meta: {
     required: [true|false],
     example: 'Example implementation code',
+    description: 'Optional description of the property',
     deprecated: 'Deprecation note that will appear on hover',
 },
 </code>
