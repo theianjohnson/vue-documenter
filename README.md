@@ -94,4 +94,6 @@ Then get to the `example` directory
 And run it!
 * `npm run serve`
 
-This will build the `/your-repo-location/vue-documenter/src/VueDocumenter.vue` and copy the compiled file to the `/your-repo-location/vue-documenter/example/dist/` directory where it'll be referenced correctly by the example `App.vue` entrypoint
+This will build the `/your-repo-location/vue-documenter/src/VueDocumenter.vue` and copy the compiled file to the `/your-repo-location/vue-documenter/example/dist/` directory where it'll be referenced correctly by the example `App.vue` entrypoint.
+
+If all worked correctly you should be able to see it working at something like `http://localhost:8080/`
