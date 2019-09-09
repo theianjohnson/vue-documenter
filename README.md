@@ -76,11 +76,11 @@ https://medium.com/skilljar-engineering/the-quickest-dirtiest-automatic-est-vue-
 * [Bug] Documentation example code spacing in named slots
 * [Feature] Add ability to group components in the documentation
 * [Feature] Better usage of slots
-* [Done, not yet published] Update events' example value to be code highlighted
-* [Done, not yet published] Update documentation table of contents to be sticky
-* [Done, not yet published] Update CSS override classes to be individual properties rather than one all-or-nothing overridable object
-* [Done, not yet published] Add documentation ~URL~ description field for component meta
-* [Done, not yet published] Add description field for prop meta
+* [Done, published 1.1.0] Update events' example value to be code highlighted
+* [Done, published 1.1.0] Update documentation table of contents to be sticky
+* [Done, published 1.1.0] Update CSS override classes to be individual properties rather than one all-or-nothing overridable object
+* [Done, published 1.1.0] Add documentation ~URL~ description field for component meta
+* [Done, published 1.1.0] Add description field for prop meta
 
 # Contributing
 PRs totally accepted 👍
