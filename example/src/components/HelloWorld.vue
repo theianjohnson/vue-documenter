@@ -33,6 +33,7 @@
 export default {
 	name: 'HelloWorld',
 	meta: {
+		description: 'A sample hello world component with some sample events, slots, and props.',
 		events: [{
 			name: 'an-event-on-load',
 			description: 'On component load',
@@ -61,6 +62,7 @@ export default {
 			default: '',
 			meta: {
 				example: 'An example string',
+				description: 'Used for the example, and maybe a <a href="/">documentation link</a>',
 			}
 		},
 		someString: {
@@ -75,6 +77,7 @@ export default {
 			default: () => [],
 			meta: {
 				example: `[]`,
+				description: 'Just an empty array',
 			},
 		},
 		someArray: {
@@ -90,6 +93,7 @@ export default {
 					'item2',
 					'item3',
 				]`,
+				description: 'A more complicated array',
 			},
 		},
 		anotherArray: {

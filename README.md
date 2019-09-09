@@ -13,26 +13,30 @@ An automatic, living Vue component documenter - yes - a component that documents
 			<another-component></another-component>
 		</vue-documenter>
 
+		// If you want full width documentation with no table of contents
+		<vue-documenter :enable-table-of-contents="false" css-class-components-column="col">
+			<some-component></some-component>
+			<another-component></another-component>
+		</vue-documenter>
+
 		// But you can also remap your own (these are defaults)
 		/*
 		<vue-documenter
-			:css-override-classes="{
-				badgeDeprecated: 'badge badge-warning',
-				badgeOptional: 'badge badge-secondary',
-				badgeRequired: 'badge badge-danger',
-				card: 'card card-body',
-				componentsColumn: 'col-sm-9',
-				componentsColumnComponent: 'card card-body',
-				componentsColumnComponentTableWrapper: 'table-responsive',
-				componentsColumnComponentTable: 'table table-striped',
-				container: 'container-fluid',
-				exampleMinimal: 'col-sm-6',
-				exampleFull: 'col-sm-6',
-				instructions: 'alert alert-info',
-				tableOfContentsColumn: 'col-sm-3',
-				tableOfContentsColumnList: '',
-				row: 'row'
-			}"
+			css-class-badge-deprecated="badge badge-warning"
+			css-class-badge-optional="badge badge-secondary"
+			css-class-badge-required="badge badge-danger"
+			css-class-card="card card-body"
+			css-class-components-column="col-sm-9"
+			css-class-components-column-component="card card-body"
+			css-class-components-column-component-table-wrapper="table-responsive"
+			css-class-components-column-component-table="table table-striped"
+			css-class-container="container-fluid"
+			css-class-example-minimal="col-sm-6"
+			css-class-example-full="col-sm-6"
+			css-class-instructions="alert alert-info"
+			css-class-table-of-contents-column="col-sm-3"
+			css-class-table-of-contents-column-list=""
+			css-class-row="row"
 		>
 			<some-component></some-component>
 			<another-component></another-component>
@@ -72,10 +76,10 @@ https://medium.com/skilljar-engineering/the-quickest-dirtiest-automatic-est-vue-
 
 # Roadmap
 * [Bug] Documentation example code spacing in named slots
-* [Bug] Update events' example value to be code highlighted
+* [Done, not yet published] Update events' example value to be code highlighted
 * [Feature] Add ability to group components in the documentation
-* [Feature] Update documentation table of contents to be sticky
-* [Feature] Update CSS override classes to be individual properties rather than one all-or-nothing overridable object
-* [Feature] Add documentation URL field for component meta
-* [Feature] Add description field for prop meta
+* [Done, not yet published] Update documentation table of contents to be sticky
+* [Done, not yet published] Update CSS override classes to be individual properties rather than one all-or-nothing overridable object
+* [Done, not yet published] Add documentation ~URL~ description field for component meta
+* [Done, not yet published] Add description field for prop meta
 * [Feature] Better usage of slots

@@ -1,33 +1,35 @@
 <template>
-<div :class="cssOverrideClasses.container || cssClassContainer">
+<div :class="cssClassContainer || cssOverrideClasses.container">
 
     <div style="display: none;">
         <slot></slot>
     </div>
 
-    <div :class="cssOverrideClasses.row || cssClassRow">
-        <div :class="cssOverrideClasses.tableOfContentsColumn || cssClassTableOfContentsColumn">
-            <div :class="cssOverrideClasses.card || cssClassCard" style="position: sticky; top: 0;">
+    <div :class="cssClassRow ||cssOverrideClasses.row">
+        <div v-if="enableTableOfContents" :class="cssClassTableOfContentsColumn || cssOverrideClasses.tableOfContentsColumn">
+            <div :class="cssClassCard || cssOverrideClasses.card" style="position: sticky; top: 0;">
                 <h2>Components</h2>
-                <ul :class="cssOverrideClasses.tableOfContentsColumnList || cssClassTableOfContentsColumnList">
+                <ul :class="cssClassTableOfContentsColumnList || cssOverrideClasses.tableOfContentsColumnList">
                    <li v-for="component in loadedComponents" :key="`table-of-contents-${component.name}`">
                        <a :href="`#${getKebabCaseFromCamelCase(component.name)}`">{{ getKebabCaseFromCamelCase(component.name) }}</a>
                    </li>
                 </ul>
             </div>
         </div>
-        <div :class="cssOverrideClasses.componentsColumn || cssClassComponentsColumn">
-            <div v-for="component in loadedComponents" :class="cssClasses.componentsColumnComponent || cssClassComponentsColumnComponent" style="margin-bottom: 3rem;" :key="`component-${component.name}`">
+        <div :class="cssClassComponentsColumn || cssOverrideClasses.componentsColumn">
+            <div v-for="component in loadedComponents" :class="cssClassComponentsColumnComponent || cssOverrideClasses.componentsColumnComponent" style="margin-bottom: 3rem;" :key="`component-${component.name}`">
 
                 <h1 :id="getKebabCaseFromCamelCase(component.name)">&lt;{{ getKebabCaseFromCamelCase(component.name) }}&gt;</h1>
+                <p v-if="component.description" v-html="component.description"></p>
 
                 <h2>Properties</h2>
 
-                <div :class="cssClasses.componentsColumnComponentTableWrapper || cssClassComponentsColumnComponentTableWrapper" style="margin-bottom: 1rem;">
-                    <table :class="cssClasses.componentsColumnComponentTable || cssClassComponentsColumnComponentTable">
+                <div :class="cssClassComponentsColumnComponentTableWrapper || cssOverrideClasses.componentsColumnComponentTableWrapper" style="margin-bottom: 1rem;">
+                    <table :class="cssClassComponentsColumnComponentTable || cssOverrideClasses.componentsColumnComponentTable">
                         <thead>
                             <tr>
                                 <th>Name</th>
+                                <th>Description</th>
                                 <th>Type</th>
                                 <th>Default Value</th>
                                 <th>Example</th>
@@ -36,12 +38,13 @@
                         <tbody>
                             <template v-if="component.properties.length > 0">
                                 <tr v-for="property in component.properties" :key="`property-${property.name}`" :class="{ 'deprecated': property.deprecated }">
-                                    <td style="white-space: nowrap;">
+                                    <td>
                                         {{ property.type !== 'string' ? ':' : '' }}{{ property.name }}
-                                        <span v-if="property.required" :class="cssClasses.badgeRequired || cssClassBadgeRequired" :title="property.required">Required</span>
-                                        <span v-if="property.deprecated" :class="cssClasses.badgeDeprecated || cssClassBadgeDeprecated" :title="property.deprecated" data-tippy>Deprecated <i class="fas fa-question-circle"></i></span>
+                                        <span v-if="property.required" :class="cssClassBadgeRequired || cssOverrideClasses.badgeRequired" :title="property.required">Required</span>
+                                        <span v-if="property.deprecated" :class="cssClassBadgeDeprecated || cssOverrideClasses.badgeDeprecated" :title="property.deprecated" data-tippy>Deprecated <i class="fas fa-question-circle"></i></span>
                                     </td>
-                                    <td style="white-space: nowrap;">{{ property.type }}</td>
+                                    <td v-html="property.description"></td>
+                                    <td>{{ property.type }}</td>
                                     <td>
                                         <div v-html="getHighlightedCodeString(property.defaultValue, (property.type === 'string' ? 'none' : 'javascript'))"></div>
                                     </td>
@@ -61,12 +64,12 @@
 
                 <h2>Events (<a href="https://vuejs.org/v2/api/#vm-emit" target="_blank">Vue Docs</a>)</h2>
 
-                <div :class="cssClasses.componentsColumnComponentTableWrapper || cssClassComponentsColumnComponentTableWrapper" style="margin-bottom: 1rem;">
-                    <table :class="cssClasses.componentsColumnComponentTable || cssClassComponentsColumnComponentTable">
+                <div :class="cssClassComponentsColumnComponentTableWrapper || cssOverrideClasses.componentsColumnComponentTableWrapper" style="margin-bottom: 1rem;">
+                    <table :class="cssClassComponentsColumnComponentTable || cssOverrideClasses.componentsColumnComponentTable">
                         <thead>
                             <tr>
                                 <th>Name</th>
-                                <th>On</th>
+                                <th>Description</th>
                                 <th>Example Value</th>
                                 <th>Usage</th>
                             </tr>
@@ -74,10 +77,10 @@
                         <tbody>
                             <template v-if="component.events.length > 0">
                                 <tr v-for="event in component.events" :key="`event-${event.name}`">
-                                    <td style="white-space: nowrap;">{{ event.name }}</td>
-                                    <td style="white-space: nowrap;">{{ event.description }}</td>
+                                    <td>{{ event.name }}</td>
+                                    <td v-html="event.description"></td>
                                     <td v-html="getHighlightedCodeString(event.example, 'javascript')"></td>
-                                    <td style="white-space: nowrap;" v-html="getEventExampleString(component, event)"></td>
+                                    <td v-html="getEventExampleString(component, event)"></td>
                                 </tr>
                             </template>
                             <tr v-else>
@@ -87,12 +90,12 @@
                     </table>
                 </div>
 
-                <div :class="cssClasses.row || cssClassRow">
-                    <div :class="cssClasses.exampleMinimal || cssClassExampleMinimalColumn">
+                <div :class="cssClassRow || cssOverrideClasses.row">
+                    <div :class="cssClassExampleMinimalColumn || cssOverrideClasses.exampleMinimal">
                         <h2>Minimal Example</h2>
                         <div v-html="getHighlightedCodeString(getComponentExampleHtml(component, true), 'html')"></div>
                     </div>
-                    <div :class="cssClasses.exampleFull || cssClassExampleFullColumn">
+                    <div :class="cssClassExampleFullColumn || cssOverrideClasses.exampleFull">
                         <h2>Full Example</h2>
                         <div v-html="getHighlightedCodeString(getComponentExampleHtml(component), 'html')"></div>
                     </div>
@@ -102,15 +105,15 @@
         </div>
     </div>
 
-    <div :class="cssClasses.instructions || cssClassInstructions">
+    <div :class="cssClassInstructions || cssOverrideClasses.instructions">
         <div>
             <h2>If you're building a new Vue component and you want it to be auto-documented here</h2>
             <div>
                 <p>
-                    <span :class="cssClasses.badgeRequired || cssClassBadgeRequired">Required</span> The component must have it's properties defined with <code>type</code> and <code>default</code> properties, see <a href="https://vuejs.org/v2/guide/components-props.html#Prop-Validation" target="_blank">Prop Validation</a>
+                    <span :class="cssClassBadgeRequired || cssOverrideClasses.badgeRequired">Required</span> The component must have it's properties defined with <code>type</code> and <code>default</code> properties, see <a href="https://vuejs.org/v2/guide/components-props.html#Prop-Validation" target="_blank">Prop Validation</a>
                 </p>
                 <p>
-                    <span :class="cssClasses.badgeOptional || cssClassBadgeOptional">Optional</span>  The component maybe also include a top level <code>meta</code> property with slot and event availability, ex.
+                    <span :class="cssClassBadgeOptional || cssOverrideClasses.badgeOptional">Optional</span>  The component maybe also include a top level <code>meta</code> property with slot and event availability, ex.
 <code style="white-space: pre;">
 meta: {
     slots: {
@@ -133,7 +136,7 @@ meta: {
 </code>
                 </p>
                 <p>
-                    <span :class="cssClasses.badgeOptional || cssClassBadgeOptional">Optional</span>  The component's properties may also include an additional <code>meta</code> property in the property definition, ex.
+                    <span :class="cssClassBadgeOptional || cssOverrideClasses.badgeOptional">Optional</span>  The component's properties may also include an additional <code>meta</code> property in the property definition, ex.
 <code style="white-space: pre;">
 meta: {
     required: [true|false],
@@ -164,6 +167,7 @@ Prism.plugins.NormalizeWhitespace.setDefaults({
 export default {
     name: 'vue-datatable',
     meta: {
+        description: 'See Vue Documenter on <a href="https://github.com/theianjohnson/vue-documenter" target="_blank">Github</a> and <a href="https://npmjs.org/vue-documenter" target="_blank">NPM</a>',
         slots: {
             default: {
                 type: 'component',
@@ -306,6 +310,14 @@ export default {
                 example: 'your-custom-css-class-string',
             },
         },
+        enableTableOfContents: {
+            type: Boolean,
+            default: true,
+            meta: {
+                example: 'false',
+                description: 'Show or hide the table of contents',
+            },
+        },
     },
     data() {
         return {
@@ -329,6 +341,7 @@ export default {
                 const properties = this.loadProperties(components[i]);
                 const component = {
                     name: components[i].componentOptions.tag,
+                    description: components[i].componentInstance.$options.meta && components[i].componentInstance.$options.meta.description,
                     properties: [...properties],
                     events: (components[i].componentInstance.$options.meta && components[i].componentInstance.$options.meta.events) ? components[i].componentInstance.$options.meta.events : [],
                     slots: (components[i].componentInstance.$options.meta && components[i].componentInstance.$options.meta.slots) ? components[i].componentInstance.$options.meta.slots : [],
@@ -511,6 +524,7 @@ export default {
                     const required = vnode.componentInstance.$options.props[item].meta && vnode.componentInstance.$options.props[item].meta.required;
                     const deprecated = vnode.componentInstance.$options.props[item].meta && vnode.componentInstance.$options.props[item].meta.deprecated;
                     let example = vnode.componentInstance.$options.props[item].meta && vnode.componentInstance.$options.props[item].meta.example;
+                    const description = vnode.componentInstance.$options.props[item].meta && vnode.componentInstance.$options.props[item].meta.description;
 
                     switch (type) {
                     case 'array':
@@ -595,6 +609,7 @@ export default {
                         type,
                         defaultValue,
                         example,
+                        description,
                         required,
                         deprecated,
                     });
@@ -664,6 +679,10 @@ export default {
 
     h2 {
         margin-top: 1rem;
+    }
+
+    table td {
+        white-space: nowrap;
     }
 
     .alert {
