@@ -1,30 +1,30 @@
 <template>
-<div :class="cssClasses.container">
+<div :class="cssOverrideClasses.container || cssClassContainer">
 
     <div style="display: none;">
         <slot></slot>
     </div>
 
-    <div :class="cssClasses.row">
-        <div :class="cssClasses.tableOfContentsColumn">
-            <div :class="cssClasses.card" style="position: sticky; top: 0;">
+    <div :class="cssOverrideClasses.row || cssClassRow">
+        <div :class="cssOverrideClasses.tableOfContentsColumn || cssClassTableOfContentsColumn">
+            <div :class="cssOverrideClasses.card || cssClassCard" style="position: sticky; top: 0;">
                 <h2>Components</h2>
-                <ul :class="cssClasses.tableOfContentsColumnList">
+                <ul :class="cssOverrideClasses.tableOfContentsColumnList || cssClassTableOfContentsColumnList">
                    <li v-for="component in loadedComponents" :key="`table-of-contents-${component.name}`">
                        <a :href="`#${getKebabCaseFromCamelCase(component.name)}`">{{ getKebabCaseFromCamelCase(component.name) }}</a>
                    </li>
                 </ul>
             </div>
         </div>
-        <div :class="cssClasses.componentsColumn">
-            <div v-for="component in loadedComponents" :class="cssClasses.componentsColumnComponent" style="margin-bottom: 3rem;" :key="`component-${component.name}`">
+        <div :class="cssOverrideClasses.componentsColumn || cssClassComponentsColumn">
+            <div v-for="component in loadedComponents" :class="cssClasses.componentsColumnComponent || cssClassComponentsColumnComponent" style="margin-bottom: 3rem;" :key="`component-${component.name}`">
 
                 <h1 :id="getKebabCaseFromCamelCase(component.name)">&lt;{{ getKebabCaseFromCamelCase(component.name) }}&gt;</h1>
 
                 <h2>Properties</h2>
 
-                <div :class="cssClasses.componentsColumnComponentTableWrapper" style="margin-bottom: 1rem;">
-                    <table :class="cssClasses.componentsColumnComponentTable">
+                <div :class="cssClasses.componentsColumnComponentTableWrapper || cssClassComponentsColumnComponentTableWrapper" style="margin-bottom: 1rem;">
+                    <table :class="cssClasses.componentsColumnComponentTable || cssClassComponentsColumnComponentTable">
                         <thead>
                             <tr>
                                 <th>Name</th>
@@ -38,8 +38,8 @@
                                 <tr v-for="property in component.properties" :key="`property-${property.name}`" :class="{ 'deprecated': property.deprecated }">
                                     <td style="white-space: nowrap;">
                                         {{ property.type !== 'string' ? ':' : '' }}{{ property.name }}
-                                        <span v-if="property.required" :class="cssClasses.badgeRequired" :title="property.required">Required</span>
-                                        <span v-if="property.deprecated" :class="cssClasses.badgeDeprecated" :title="property.deprecated" data-tippy>Deprecated <i class="fas fa-question-circle"></i></span>
+                                        <span v-if="property.required" :class="cssClasses.badgeRequired || cssClassBadgeRequired" :title="property.required">Required</span>
+                                        <span v-if="property.deprecated" :class="cssClasses.badgeDeprecated || cssClassBadgeDeprecated" :title="property.deprecated" data-tippy>Deprecated <i class="fas fa-question-circle"></i></span>
                                     </td>
                                     <td style="white-space: nowrap;">{{ property.type }}</td>
                                     <td>
@@ -61,8 +61,8 @@
 
                 <h2>Events (<a href="https://vuejs.org/v2/api/#vm-emit" target="_blank">Vue Docs</a>)</h2>
 
-                <div :class="cssClasses.componentsColumnComponentTableWrapper" style="margin-bottom: 1rem;">
-                    <table :class="cssClasses.componentsColumnComponentTable">
+                <div :class="cssClasses.componentsColumnComponentTableWrapper || cssClassComponentsColumnComponentTableWrapper" style="margin-bottom: 1rem;">
+                    <table :class="cssClasses.componentsColumnComponentTable || cssClassComponentsColumnComponentTable">
                         <thead>
                             <tr>
                                 <th>Name</th>
@@ -87,12 +87,12 @@
                     </table>
                 </div>
 
-                <div :class="cssClasses.row">
-                    <div :class="cssClasses.exampleMinimal">
+                <div :class="cssClasses.row || cssClassRow">
+                    <div :class="cssClasses.exampleMinimal || cssClassExampleMinimal">
                         <h2>Minimal Example</h2>
                         <div v-html="getHighlightedCodeString(getComponentExampleHtml(component, true), 'html')"></div>
                     </div>
-                    <div :class="cssClasses.exampleFull">
+                    <div :class="cssClasses.exampleFull || cssClassExampleFull">
                         <h2>Full Example</h2>
                         <div v-html="getHighlightedCodeString(getComponentExampleHtml(component), 'html')"></div>
                     </div>
@@ -102,15 +102,15 @@
         </div>
     </div>
 
-    <div :class="cssClasses.instructions">
+    <div :class="cssClasses.instructions || cssClassInstructions">
         <div>
             <h2>If you're building a new Vue component and you want it to be auto-documented here</h2>
             <div>
                 <p>
-                    <span :class="cssClasses.badgeRequired">Required</span> The component must have it's properties defined with <code>type</code> and <code>default</code> properties, see <a href="https://vuejs.org/v2/guide/components-props.html#Prop-Validation" target="_blank">Prop Validation</a>
+                    <span :class="cssClasses.badgeRequired || cssClassBadgeRequired">Required</span> The component must have it's properties defined with <code>type</code> and <code>default</code> properties, see <a href="https://vuejs.org/v2/guide/components-props.html#Prop-Validation" target="_blank">Prop Validation</a>
                 </p>
                 <p>
-                    <span :class="cssClasses.badgeOptional">Optional</span>  The component maybe also include a top level <code>meta</code> property with slot and event availability, ex.
+                    <span :class="cssClasses.badgeOptional || cssClassBadgeOptional">Optional</span>  The component maybe also include a top level <code>meta</code> property with slot and event availability, ex.
 <code style="white-space: pre;">
 meta: {
     slots: {
@@ -133,7 +133,7 @@ meta: {
 </code>
                 </p>
                 <p>
-                    <span :class="cssClasses.badgeOptional">Optional</span>  The component's properties may also include an additional <code>meta</code> property in the property definition, ex.
+                    <span :class="cssClasses.badgeOptional || cssClassBadgeOptional">Optional</span>  The component's properties may also include an additional <code>meta</code> property in the property definition, ex.
 <code style="white-space: pre;">
 meta: {
     required: [true|false],
@@ -197,14 +197,119 @@ export default {
                 }
             },
             meta: {
+                deprecated: 'Override classes are now split out into their own properties',
                 example: '{ card: \'your-custom-card-class\' }',
             }
+        },
+        cssClassBadgeDeprecated: {
+            type: String,
+            default: 'badge badge-warning',
+            meta: {
+                example: 'your-custom-css-class-string',
+            },
+        },
+        cssClassBadgeOptional: {
+            type: String,
+            default: 'badge badge-secondary',
+            meta: {
+                example: 'your-custom-css-class-string',
+            },
+        },
+        cssClassBadgeRequired: {
+            type: String,
+            default: 'badge badge-danger',
+            meta: {
+                example: 'your-custom-css-class-string',
+            },
+        },
+        cssClassCard: {
+            type: String,
+            default: 'card card-body',
+            meta: {
+                example: 'your-custom-css-class-string',
+            },
+        },
+        cssClassComponentsColumn: {
+            type: String,
+            default: 'col-sm-9',
+            meta: {
+                example: 'your-custom-css-class-string',
+            },
+        },
+        cssClassComponentsColumnComponent: {
+            type: String,
+            default: 'card card-body',
+            meta: {
+                example: 'your-custom-css-class-string',
+            },
+        },
+        cssClassComponentsColumnComponentTableWrapper: {
+            type: String,
+            default: 'table-responsive',
+            meta: {
+                example: 'your-custom-css-class-string',
+            },
+        },
+        cssClassComponentsColumnComponentTable: {
+            type: String,
+            default: 'table table-striped',
+            meta: {
+                example: 'your-custom-css-class-string',
+            },
+        },
+        cssClassContainer: {
+            type: String,
+            default: 'container-fluid',
+            meta: {
+                example: 'your-custom-css-class-string',
+            },
+        },
+        cssClassExampleMinimal: {
+            type: String,
+            default: 'col-sm-6',
+            meta: {
+                example: 'your-custom-css-class-string',
+            },
+        },
+        cssClassExampleFull: {
+            type: String,
+            default: 'col-sm-6',
+            meta: {
+                example: 'your-custom-css-class-string',
+            },
+        },
+        cssClassInstructions: {
+            type: String,
+            default: 'alert alert-info',
+            meta: {
+                example: 'your-custom-css-class-string',
+            },
+        },
+        cssClassTableOfContentsColumn: {
+            type: String,
+            default: 'col-sm-3',
+            meta: {
+                example: 'your-custom-css-class-string',
+            },
+        },
+        cssClassTableOfContentsColumnList: {
+            type: String,
+            default: '',
+            meta: {
+                example: 'your-custom-css-class-string',
+            },
+        },
+        cssClassRow: {
+            type: String,
+            default: 'row',
+            meta: {
+                example: 'your-custom-css-class-string',
+            },
         },
     },
     data() {
         return {
             loadedComponents: [],
-            cssClasses: {},
         };
     },
     created() {
