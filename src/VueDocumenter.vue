@@ -113,7 +113,7 @@
                     <span :class="cssClassBadgeRequired || cssOverrideClasses.badgeRequired">Required</span> The component must have it's properties defined with <code>type</code> and <code>default</code> properties, see <a href="https://vuejs.org/v2/guide/components-props.html#Prop-Validation" target="_blank">Prop Validation</a>
                 </p>
                 <p>
-                    <span :class="cssClassBadgeOptional || cssOverrideClasses.badgeOptional">Optional</span>  The component maybe also include a top level <code>meta</code> property with slot and event availability, ex.
+                    <span :class="cssClassBadgeOptional || cssOverrideClasses.badgeOptional">Optional</span>  The component maybe also include a top level <code>meta</code> property with a description, slot, and event availability, ex.
 <code style="white-space: pre;">
 meta: {
     description: 'Optional component description that\'ll get piped into the documentation',
@@ -167,7 +167,6 @@ Prism.plugins.NormalizeWhitespace.setDefaults({
 });
 
 export default {
-    name: 'vue-datatable',
     meta: {
         description: 'See Vue Documenter on <a href="https://github.com/theianjohnson/vue-documenter" target="_blank">Github</a> and <a href="https://npmjs.org/vue-documenter" target="_blank">NPM</a>',
         slots: {
