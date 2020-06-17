@@ -110,7 +110,7 @@
             <h2>If you're building a new Vue component and you want it to be auto-documented here</h2>
             <div>
                 <p>
-                    <span :class="cssClassBadgeRequired || cssOverrideClasses.badgeRequired">Required</span> The component must have it's properties defined with <code>type</code> and <code>default</code> properties, see <a href="https://vuejs.org/v2/guide/components-props.html#Prop-Validation" target="_blank">Prop Validation</a>
+                    <span :class="cssClassBadgeRequired || cssOverrideClasses.badgeRequired">Required</span> The component must have its properties defined with <code>type</code> and <code>default</code> properties, see <a href="https://vuejs.org/v2/guide/components-props.html#Prop-Validation" target="_blank">Prop Validation</a>
                 </p>
                 <p>
                     <span :class="cssClassBadgeOptional || cssOverrideClasses.badgeOptional">Optional</span>  The component maybe also include a top level <code>meta</code> property with a description, slot, and event availability, ex.
